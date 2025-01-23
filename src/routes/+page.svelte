@@ -3,7 +3,7 @@
     let { data } = $props();
 
     let tasks = data.tasks;
-    let dd = data.date;
+    let dd = $state(data.date);
 
     let dds = { y: dd.getFullYear(), m: dd.getMonth() + 1, d: dd.getDate(), day: dd.getDay() + 1 };
 
@@ -34,15 +34,14 @@
         }
 
         getLeap(y: number) {
-            let leap = false;
             if (y % 4 === 0) {
                 if (y % 100 === 0 && !(y % 400 === 0)) {
-                    return leap; // isNotLeap
+                    return false; // isNotLeap
                 } else {
-                    return !leap; // isLeap
+                    return true; // isLeap
                 }
             } else {
-                return !leap; // isLeap
+                return false; // isLeap
             }
         }
 
@@ -58,12 +57,14 @@
             console.log(this.y, this.m, add);
         }
 
-        getMonthDays(y: number, m: number) {
-            if ((c.m % 2 === 1 && c.m <= 7) || (c.m % 2 === 0 && c.m >= 8)) {
+        getMonthDays(y: number, m: number, isLeap: boolean) {
+            if (m % 2 === 1 && m <= 7) {
                 return 31;
-            } else if (c.m === 2 && c.getLeap(c.y)) {
+            } else if (m % 2 === 0 && m >= 8) {
+                return 31;
+            } else if (m === 2 && isLeap) {
                 return 29;
-            } else if (c.m === 2 && !c.getLeap(c.y)) {
+            } else if (m === 2 && !isLeap) {
                 return 28;
             } else {
                 return 30;
@@ -72,7 +73,7 @@
     }
 
     let c = new cur(dds.y, dds.m, dds.d, dds.day);
-    let monthCase = $state(c.getMonthDays(c.y, c.m));
+    let monthLength = $state(c.getMonthDays(c.y, c.m, c.getLeap(c.y)));
 
     let curTask = $state(
         tasks.filter((t) => {
@@ -80,8 +81,6 @@
             return dt[0] === c.y && dt[1] === c.m;
         })
     );
-
-    console.log(tasks);
 </script>
 
 <div>
@@ -90,6 +89,7 @@
         <button
             onclick={() => {
                 c.changeM(-1);
+                monthLength = c.getMonthDays(c.y, c.m, c.getLeap(c.y));
             }}><i class="fa-solid fa-arrow-left"></i></button
         >
         <button id="current">{c.y}년 {c.m}월</button>
@@ -97,6 +97,7 @@
         <button
             onclick={() => {
                 c.changeM(1);
+                monthLength = c.getMonthDays(c.y, c.m, c.getLeap(c.y));
             }}><i class="fa-solid fa-arrow-right"></i></button
         >
     </div>
@@ -107,9 +108,9 @@
     </div>
     <div id="calendar">
         {#each { length: c.getDay(c.y, c.m, 1) } as _}
-            <div class="b"></div>
+            <div class="b">-</div>
         {/each}
-        {#each { length: monthCase } as _, i}
+        {#each { length: monthLength } as _, i}
             {#if c.d === i + 1}
                 <div class="d today">{i + 1}</div>
             {:else if c.getDay(c.y, c.m, i + 1) === 6}
@@ -120,7 +121,9 @@
                 <div class="d">{i + 1}</div>
             {/if}
         {/each}
-        
+        {#each { length: 42 - c.getDay(c.y, c.m, 1) - monthLength } as _}
+            <div class="b">-</div>
+        {/each}
         <!-- {#each { length: c.getDay(c.y, c.m, 1) } as _}
             <div class="b"></div>
         {/each}
