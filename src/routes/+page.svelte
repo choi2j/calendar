@@ -37,12 +37,12 @@
             let leap = false;
             if (y % 4 === 0) {
                 if (y % 100 === 0 && !(y % 400 === 0)) {
-                    return leap;
+                    return leap; // isNotLeap
                 } else {
-                    return !leap;
+                    return !leap; // isLeap
                 }
             } else {
-                return !leap;
+                return !leap; // isLeap
             }
         }
 
@@ -57,15 +57,27 @@
             }
             console.log(this.y, this.m, add);
         }
+
+        getMonthDays(y: number, m: number) {
+            if ((c.m % 2 === 1 && c.m <= 7) || (c.m % 2 === 0 && c.m >= 8)) {
+                return 31;
+            } else if (c.m === 2 && c.getLeap(c.y)) {
+                return 29;
+            } else if (c.m === 2 && !c.getLeap(c.y)) {
+                return 28;
+            } else {
+                return 30;
+            }
+        }
     }
 
     let c = new cur(dds.y, dds.m, dds.d, dds.day);
-    let isLeap = c.getLeap(c.y);
+    let monthCase = $state(c.getMonthDays(c.y, c.m));
 
     let curTask = $state(
         tasks.filter((t) => {
             let dt = t.when.split("-").map((ti: string) => parseInt(ti));
-            return dt[0] === c.y && dt[1] === c.m && dt[2] === c.d;
+            return dt[0] === c.y && dt[1] === c.m;
         })
     );
 
@@ -94,6 +106,21 @@
         {/each}
     </div>
     <div id="calendar">
+        {#each { length: c.getDay(c.y, c.m, 1) } as _}
+            <div class="b"></div>
+        {/each}
+        {#each { length: monthCase } as _, i}
+            {#if c.d === i + 1}
+                <div class="d today">{i + 1}</div>
+            {:else if c.getDay(c.y, c.m, i + 1) === 6}
+                <div class="d sat">{i + 1}</div>
+            {:else if c.getDay(c.y, c.m, i + 1) === 0}
+                <div class="d sun">{i + 1}</div>
+            {:else}
+                <div class="d">{i + 1}</div>
+            {/if}
+        {/each}
+        
         <!-- {#each { length: c.getDay(c.y, c.m, 1) } as _}
             <div class="b"></div>
         {/each}
