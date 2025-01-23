@@ -1,0 +1,172 @@
+#months {
+    text-align: center;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    button {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+    }
+
+    #current {
+        font-weight: 700;
+    }
+}
+
+#days {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    padding: 0 1rem;
+
+    .day {
+        padding: 1rem;
+        border-bottom: #ffffff80 2px solid;
+        border-top: #ffffff80 2px solid;
+        font-weight: 700;
+    }
+}
+
+#calendar {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    padding: 1rem;
+    border-bottom: #ffffff80 3px solid;
+    min-height: 360px;
+    max-height: 360px;
+
+    .b {
+        background: none;
+    }
+
+    .d {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        margin: 0.5rem;
+        color: #fff;
+        border-radius: 10px;
+        border: #ffffff80 2px solid;
+        font-weight: 500;
+
+        &:hover {
+            background-color: #fff;
+            color: #222;
+        }
+    }
+
+    .sat {
+        color: #2578ff;
+        border: #2578ff80 2px solid;
+
+        &:hover {
+            background-color: #2578ff;
+            color: #222;
+        }
+    }
+
+    .sun {
+        color: #ff2525;
+        border: #ff252580 2px solid;
+
+        &:hover {
+            background-color: #ff2525;
+            color: #222;
+        }
+    }
+
+    .today {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .withTask {
+        color: #3ad284;
+        border: #3ad28480 2px solid;
+
+        &:hover {
+            background-color: #3ad284;
+            color: #222;
+        }
+    }
+}
+
+#tasks {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .tasksHead {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+
+        .tasksTitle {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .newTaskBtn {
+            background: none;
+            font-size: 1.2rem;
+        }
+    }
+
+    .taskList {
+        width: 100%;
+        padding: 1rem;
+        overflow-y: auto;
+
+        .taskItem {
+            width: 100%;
+            background-color: #3ad28480;
+            border: #3ad284 2px solid;
+            border-radius: 10px;
+            padding: 0.5rem;
+            max-height: 4rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .task {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+
+                h3,
+                p {
+                    max-width: 10rem;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .func {
+                display: flex;
+                gap: 0.5rem;
+                button {
+                    background: none;
+                    padding: 0.5rem;
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}
