@@ -90,6 +90,10 @@
             onclick={() => {
                 c.changeM(-1);
                 monthLength = c.getMonthDays(c.y, c.m, c.getLeap(c.y));
+                curTask = tasks.filter((t) => {
+                    let dt = t.when.split("-").map((ti: string) => parseInt(ti));
+                    return dt[0] === c.y && dt[1] === c.m;
+                });
             }}><i class="fa-solid fa-arrow-left"></i></button
         >
         <button id="current">{c.y}년 {c.m}월</button>
@@ -98,6 +102,10 @@
             onclick={() => {
                 c.changeM(1);
                 monthLength = c.getMonthDays(c.y, c.m, c.getLeap(c.y));
+                curTask = tasks.filter((t) => {
+                    let dt = t.when.split("-").map((ti: string) => parseInt(ti));
+                    return dt[0] === c.y && dt[1] === c.m;
+                });
             }}><i class="fa-solid fa-arrow-right"></i></button
         >
     </div>
@@ -111,7 +119,12 @@
             <div class="b">-</div>
         {/each}
         {#each { length: monthLength } as _, i}
-            {#if c.d === i + 1}
+            {#if curTask.find((e) => {
+                let dt = e.when.split("-").map((ti: string) => parseInt(ti));
+                return dt[0] === c.y && dt[1] === c.m && dt[2] === i + 1;
+            })}
+                <div class="d withTask">{i + 1}</div>
+            {:else if c.m === dds.m && c.d === i + 1}
                 <div class="d today">{i + 1}</div>
             {:else if c.getDay(c.y, c.m, i + 1) === 6}
                 <div class="d sat">{i + 1}</div>
